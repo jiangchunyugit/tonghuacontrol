@@ -15,10 +15,13 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 
@@ -112,5 +115,30 @@ public class EquipInfoController extends AbsBaseController {
             return sendSuccessMessage("操作成功");
         }
         return sendFailMessage("操作失败");
+    }
+
+    /**
+     * 删除
+     */
+    @RequestMapping(value = "/testhandwrite", method = RequestMethod.GET)
+    @MyRespBody
+    @ApiOperation(value="手写识别")
+    @MySysLog(action = SysLogAction.SAVE,module = SysLogModule.PC_PROJECT,desc = "手写识别")
+    public MyRespBundle<String> equipmentById(@ApiParam("坐标") @RequestParam(value = "position") String position){
+//        MultiValueMap<String, Object> para = initParam();
+//        para.add("track_str",174,257,1,0,6,1,7,3,9,1,12,3,13,2,16,3,15,3,12,2,9,2,8,1,6,1,4,0,2,0,1,0,1,0,1,0,1,0,0,-1,0,-1,-2,0,eb,121,349,8,0,17,1,24,0,30,0,35,0,34,2,33,3,26,3,13,2,9,1,6,0,2,1,2,0,0,1,-1,0,-1,0,0,0,-1,0,-1,0,-1,0,-1,0,-6,-1,-7,-3,-6,-2,-7,-2,-8,-3,-9,-3,-8,-1,eb,237,293,0,2,1,17,1,13,2,12,0,9,0,8,0,8,0,8,0,7,1,6,0,5,0,5,0,2,0,3,0,3,0,0,0,2,0,1,0,1,-1,0,-1,0,-2,-4,-2,-4,-2,-4,-1,-4);
+//        para.add("cmd",0);
+       String aa =  invokeRemoteMethod("https://handwriting.shuru.qq.com/cloud/cgi-bin/cloud_hw_pub.wsgi?track_str="+position+"&cmd=0");
+        return sendJsonData(ResultMessage.SUCCESS,aa);
+    }
+
+    private MultiValueMap<String, Object> initParam() {
+        MultiValueMap<String, Object> param = new LinkedMultiValueMap<>();
+        return param;
+    }
+
+    private String invokeRemoteMethod(String url) {
+        RestTemplate template = new RestTemplate();
+       return template.getForObject(url, String.class);
     }
 }
