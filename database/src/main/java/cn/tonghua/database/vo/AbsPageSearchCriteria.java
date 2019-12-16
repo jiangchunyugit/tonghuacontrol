@@ -8,7 +8,7 @@ public abstract class AbsPageSearchCriteria {
      * 每页记录数
      */
     @ApiModelProperty("每页记录数")
-    protected Integer rows = 15;
+    protected Integer rows = 100;
     /**
      * 页号
      */

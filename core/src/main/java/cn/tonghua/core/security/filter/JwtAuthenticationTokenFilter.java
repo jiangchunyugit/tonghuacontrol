@@ -4,6 +4,7 @@ import cn.tonghua.core.bundle.MyRespBundle;
 import cn.tonghua.core.security.dao.SecurityUserDao;
 import cn.tonghua.core.security.utils.JwtUtils;
 import com.google.gson.Gson;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -35,6 +36,25 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
         String authHeader = request.getHeader("Authorization");
+
+        String souChl = request.getHeader("souChl");
+
+        if (StringUtils.isNotBlank(souChl)) {
+
+            if (!"999".equals(souChl)){
+                response.setCharacterEncoding("UTF-8");
+                response.setContentType("application/json;charset=utf-8");
+                response.setHeader("Access-Control-Allow-Origin","*");
+                MyRespBundle<String> resp = new MyRespBundle<>();
+                resp.setTimestamp(Instant.now().toEpochMilli());
+                resp.setMsg("非法授权!");
+                resp.setCode(HttpStatus.FORBIDDEN.value());
+                resp.setData("非法授权");
+                response.getWriter().write(new Gson().toJson(resp));
+                return;
+            }
+            System.out.print("加头");
+        };
 
         String tokenHead = "Bearer ";
         if (authHeader != null && authHeader.startsWith(tokenHead)) {

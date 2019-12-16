@@ -18,7 +18,7 @@
         </commentGenerator>
 
         <jdbcConnection driverClass="com.mysql.cj.jdbc.Driver"
-                        connectionURL="jdbc:mysql://localhost:3306/jiang_test"
+                        connectionURL="jdbc:mysql://localhost:3306/qingdao"
                         userId="root"
                         password="123456"/>
         <javaTypeResolver>
@@ -50,7 +50,7 @@
             <property name="enableSubPackages" value="false"/>
         </javaClientGenerator>
         <!-- 表-->
-        <table tableName="question_answer" domainObjectName="QuestionAnswer" />
+        <table tableName="t_title" domainObjectName="TTitle" />
         <!--<table tableName="site_question" domainObjectName="SiteQuestion" />-->
         <!--<table tableName="user_answer" domainObjectName="UserAnswer" />-->
         <!--<table tableName="file_resource_staff" domainObjectName="FileResourceStaff"/>-->

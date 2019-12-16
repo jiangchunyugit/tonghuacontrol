@@ -43,6 +43,12 @@ public class ExcelUtils {
         FileOutputStream out = new FileOutputStream(f);
         return exportExcel(excelData, out);
     }
+
+    public static int generateExcel(List<ExcelData> excelDatas, String path) throws Exception {
+        File f = new File(path);
+        FileOutputStream out = new FileOutputStream(f);
+        return exportExcel(excelDatas, out);
+    }
  
     private static int exportExcel(ExcelData data, OutputStream out) throws Exception {
         XSSFWorkbook wb = new XSSFWorkbook();
@@ -54,6 +60,34 @@ public class ExcelUtils {
             }
             XSSFSheet sheet = wb.createSheet(sheetName);
             rowIndex = writeExcel(wb, sheet, data);
+            wb.write(out);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            //此处需要关闭 wb 变量
+            out.close();
+        }
+        return rowIndex;
+    }
+
+    private static int exportExcel(List<ExcelData> datas, OutputStream out) throws Exception {
+
+        XSSFWorkbook wb = new XSSFWorkbook();
+        int rowIndex = 0;
+        for (int i=0;i<datas.size();i++) {
+            String sheetName = datas.get(i).getName();
+            XSSFSheet sheet = wb.createSheet("sheet"+(i+1));
+            writeExcel(wb, sheet, datas.get(i));
+        }
+//        datas.forEach(data->{
+//            String sheetName = data.getName();
+//            if (null == sheetName) {
+//                sheetName = "Sheet1";
+//            }
+//            XSSFSheet sheet = wb.createSheet(sheetName);
+//             writeExcel(wb, sheet, data);
+//        });
+        try {
             wb.write(out);
         } catch (Exception e) {
             e.printStackTrace();

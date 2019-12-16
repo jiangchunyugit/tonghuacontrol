@@ -1,10 +1,23 @@
 package cn.tonghua.web.test;
 
-import java.io.IOException;
+import cn.hutool.core.io.resource.ClassPathResource;
+import cn.tonghua.database.mapper.SiteInfoMapper;
+import cn.tonghua.database.model.SiteInfoExample;
+import cn.tonghua.database.vo.SiteVO;
+import cn.tonghua.service.utils.*;
+import com.github.pagehelper.PageHelper;
+import com.google.gson.Gson;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.io.*;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.MulticastSocket;
 import java.net.UnknownHostException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 public class StartTest {
 
@@ -83,4 +96,138 @@ public class StartTest {
     private static byte hexToDec(char c){
         return (byte)"0123456789ABCDEF".indexOf(c);
     }
+
+    @Autowired
+    SiteInfoMapper siteInfoMapper;
+
+    @Test
+    public void testguangda() {
+
+//            SimpleDateFormat format1=new SimpleDateFormat("yyyy-MM-dd");
+//            Calendar calendar=Calendar.getInstance();
+//            calendar.add(Calendar.MONTH, -3);
+//            calendar.set(Calendar.DAY_OF_MONTH, 1);
+//            System.out.print(format1.format(calendar.getTime()));
+//        Map<String,Object> param = new HashMap<String,Object>();
+//        param.put("channel", "999");//渠道号，系统真实所属渠道编号
+//        param.put("tradingCode", "V001");//交易码 默认V001
+//        param.put("orgCode", "3550");//机构号，传真实机构号
+//        param.put("staticDb", "BJZT01");//底库编号,1.上海互动墙传SHZT01，2.北京互动墙传BJZT01
+//        param.put("sceneImg", "");//现场照,图片大小小于100K，并且人脸图像清晰，不要出现多人脸情况
+//        String signStr = "FRS_850_V001_IBISVIP";//FRS_渠道号_交易码_IBISVIP
+//        param.put("signature", Md5.md5(signStr));//签名
+//        System.out.print(new Gson().toJson(param));
+
+        String imgPath ="D:\\test.xlsx";
+        FileInputStream in =null;
+        try {
+            in=new FileInputStream(imgPath);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+
+        ExcelToListMap.TableTitle tableTitle = new ExcelToListMap.TableTitle();
+        ExcelToListMap.TableTitle tableTitle1 = new ExcelToListMap.TableTitle();
+        List<ExcelToListMap.TableTitle> map = new ArrayList<>();
+        map.add(tableTitle);
+        tableTitle.setExcelTitle("title1");
+        tableTitle1.setExcelTitle("title2");
+        tableTitle.setToTitle("title1");
+        tableTitle1.setToTitle("title2");
+        map.add(tableTitle1);
+        List<Map<String, String>> maps = new ArrayList<>();
+        try {
+            maps = ExcelToListMap.analysis(in,map);
+            System.out.print("a");
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InvalidFormatException e) {
+            e.printStackTrace();
+
+        }
+
+//        data=new byte[in.available()];
+//        try {
+//
+//            ClassPathResource classPathResource = new ClassPathResource("classpath:/sensitivetmp/SensitiveWords.txt");
+//            InputStream inputStream = classPathResource.getStream();
+//
+//            //输出文件
+//            InputStream is = new BufferedInputStream(in);
+////            InputStream is = Thread.currentThread().getContextClassLoader()
+////                    .getResourceAsStream("SensitiveWords.txt");
+//
+//            InputStreamReader read = new InputStreamReader(is,"GBK");
+//            BufferedReader bufferedReader = new BufferedReader(read);
+//            String lineTxt;
+//            while ((lineTxt = bufferedReader.readLine()) != null) {
+//                lineTxt = lineTxt.trim();
+//            }
+//            read.close();
+//        } catch (Exception e) {
+//            System.out.print("失败");
+////            logger.error("读取敏感词文件失败" + e.getMessage());
+//        }
+
+//        ExcelData data = new ExcelData();
+//        String title = "合同信息数据";
+//        data.setName(title);
+//        //添加表头
+//        List<String> titles = new ArrayList<>();
+//        titles.add("序号");
+//        titles.add("比列编号");
+//        titles.add("比列名称");
+//        titles.add("比列有效期");
+//        titles.add("创建时间");
+//        titles.add("创建人");
+//        titles.add("比列状态");
+//        titles.add("备注");
+//        titles.add("比例(%)");
+//        titles.add("金额（元）");
+//        data.setTitles(titles);
+        //添加列
+//        List<List<Object>> rows = new ArrayList<>();
+//        List<Object> row = null;
+//        PageHelper.startPage(ratio.getPage(), ratio.getRows());
+//        SettlementRatioInfoExample example = new SettlementRatioInfoExample();
+//        searchRef(example, ratio);
+//        List<SettlementRatioInfo> list = settlementRatioInfoMapper.selectByExample(example);
+//        for(int i=0; i<list.size();i++){
+//            row=new ArrayList<>();
+//            row.add(i+1);
+//            row.add(list.get(i).getRatioNumber());
+//            row.add(list.get(i).getFeeName());
+//            row.add(DateUtils.dateToDateTime(list.get(i).getEffectStartTime())+"———"+DateUtils.dateToDateTime(list.get(i).getEffectStartTime()));
+//            row.add(DateUtils.dateToDateTime(list.get(i).getCreateTime()));
+//            row.add(list.get(i).getCreateUser());
+//            row.adEd(SettlementStatus.getDesc(list.get(i).getStatus()));
+//            row.add(list.get(i).getRemark());
+//            row.add(list.get(i).getRatio());
+//            row.add(list.get(i).getAmount());
+//            rows.add(row);
+////        }
+//        data.setRows(rows);
+//        SimpleDateFormat fdate=new SimpleDateFormat("yyyy-MM-dd-HHmmss");
+//        String fileName=title+"_"+fdate.format(new Date())+".xls";
+//        File pathDir= new File("D:\\jjj" );
+//        if(!pathDir.exists()){
+//            pathDir.mkdirs();
+//        }
+//        try {
+//            ExcelUtils.generatexcel(data,"D:\\jjj\\" +
+//                    ""+fileName);
+//        } catch (Exception e) {
+////            printErrorMes("结算比列导出异常",e.getMessage());
+//        }
+
+
+
+
+
+
+
+    }
+
+
 }
