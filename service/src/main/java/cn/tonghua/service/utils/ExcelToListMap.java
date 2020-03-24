@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @author xusonghui
+ * @author jiangchunyu
  * excel转换listMap
  */
 public class ExcelToListMap {
@@ -68,8 +68,12 @@ public class ExcelToListMap {
         Map<String, String> map = new HashMap<>();
         for (int i = 0; i < row.getLastCellNum(); i++) {
             Cell cell = row.getCell(i);
-            cell.setCellType(Cell.CELL_TYPE_STRING);
-            String content = cell.getStringCellValue();
+            String content ="";
+            // cell属性不为空情况
+            if (cell!=null) {
+                cell.setCellType(Cell.CELL_TYPE_STRING);
+                content = cell.getStringCellValue();
+            }
             TableTitle tableTitle = titleIndexMap.get(i);
             if (tableTitle == null) {
                 continue;

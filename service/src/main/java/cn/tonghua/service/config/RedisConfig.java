@@ -44,9 +44,7 @@ public class RedisConfig {
     public RedisTemplate<String, Object> objRedisTemplate(RedisConnectionFactory factory) {
 
         RedisTemplate<String, Object> template = new RedisTemplate<>();
-        // 配置连接工厂
         template.setConnectionFactory(factory);
-
         template.setValueSerializer(new GsonSerializer(Object.class));
         template.setKeySerializer(new StringRedisSerializer());
 

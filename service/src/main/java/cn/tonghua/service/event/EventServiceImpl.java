@@ -14,9 +14,9 @@ public class EventServiceImpl implements EventService {
     public EventServiceImpl(ApplicationEventPublisher applicationEventPublisher) {
 
 //        super(applicationEventPublisher);
-        System.out.println(applicationEventPublisher);
         this.applicationEventPublisher = applicationEventPublisher;
     }
+
 
 //    /**
 //     * 发布事件

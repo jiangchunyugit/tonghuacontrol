@@ -1,13 +1,14 @@
 package cn.tonghua.service.utils;
 
+import java.io.File;
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.nio.ByteBuffer;
+import java.util.*;
 
+import com.sun.tools.internal.xjc.reader.xmlschema.bindinfo.BIConversion;
+import org.apache.commons.codec.DecoderException;
+import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.lang3.StringUtils;
 
 public class CommonGroupUtils {
@@ -83,7 +84,43 @@ public class CommonGroupUtils {
         // 正式分组
         listGroup2Map(list, map, method);
     }
-   
+
+    /**
+     * 根据传进来的时间返回corn表达式 HH:MM:SS->"0 mm hh * * ?"每天几点过几分运行
+     * @param time
+     * @return
+     */
+    public static String getCorn(String time) {
+        if (time.length() == 8) {
+            String [] timeList = time.split(":");
+            if (timeList.length >2){
+                StringBuffer stringBuffer = new StringBuffer();
+                if (timeList[0].length() == 2) {
+                    String hh;
+                    if (timeList[0].substring(0,1).equals("0")) {
+                        hh= timeList[0].substring(1,2);
+                    } else {
+                        hh = timeList[0];
+                    }
+                    if (timeList[1].length() == 2) {
+                        String mm;
+                        if (timeList[1].substring(0,1).equals("0")) {
+                            mm= timeList[1].substring(1,2);
+                        } else {
+                            mm = timeList[1];
+                        }
+                        stringBuffer.append("0 ");
+                        stringBuffer.append(mm);
+                        stringBuffer.append(" ");
+                        stringBuffer.append(hh);
+                        stringBuffer.append(" * * ?");
+                        return stringBuffer.toString();
+                    }
+                }
+            }
+        }
+        return null;
+    }
 	/**
      * 根据类和方法名，获取方法对象
      * 
@@ -144,6 +181,104 @@ public class CommonGroupUtils {
         }
     }
 
-	
-	
+
+    /**
+     * 删除文件
+     * @param path
+     * @return
+     */
+    public static boolean deleteDir(String path) {
+        File file = new File(path);
+        // 判断是否待删除目录是否存在
+        if (!file.exists()) {
+            return false;
+        }
+        // 取得当前目录下所有文件和文件夹
+        String[] content = file.list();
+        for (String name : content) {
+            File temp = new File(path, name);
+            // 判断是否是目录
+            if (temp.isDirectory()) {
+                // 递归调用，删除目录里的内容
+                deleteDir(temp.getAbsolutePath());
+                temp.delete();
+            } else {
+                temp.delete();// 删除文件
+            }
+        }
+        return true;
+    }
+
+    /**
+     * 创建文件地址
+     * @param path
+     * @return
+     */
+    public static boolean makeDir(String path) {
+        File file = new File(path);
+        // 判断是否待删除目录是否存在
+        if (!file.exists()) {
+            file.mkdirs();
+        }
+        return true;
+    }
+
+    /**
+     * 取出双引号之前的文件路径
+     * @param url
+     * @return
+     */
+    public static String pathFiter(String url) {
+        String procName = url.substring(0,url.lastIndexOf("/")+1);
+        return procName.replace("/","\\");
+    }
+
+    /**
+     * 债券类型
+     */
+    public static String bondinfoConvert (String zqlb) {
+        if (zqlb.equals("A")) {
+            return "记账式";
+        }
+        return "电子式";
+    }
+
+    /**
+     * 币种转换
+     */
+    public static String moneyConvert (String zqlb) {
+        if (zqlb.equals("CNY")) {
+            return "人民币";
+        }
+        return "";
+    }
+
+    /**
+     * 将16进制字符串转换为用byte数组表示的二进制形式
+     * @param hexString：16进制字符串
+     * @return：用byte数组表示的十六进制数
+     */
+    public static byte[] hexToBinary(String hexString){
+        if (hexString == null || hexString.equals("")) {
+            return null;
+        }
+        hexString = hexString.toUpperCase().replace("0X", "");
+        int length = hexString.length() / 2;
+        char[] hexChars = hexString.toCharArray();
+        byte[] d = new byte[length];
+        for (int i = 0; i < length; i++) {
+            int pos = i * 2;
+            d[i] = (byte) (charToByte(hexChars[pos]) << 4 | charToByte(hexChars[pos + 1]));
+        }
+        return d;
+    }
+
+    /**
+     * Convert char to byte
+     * @param c char
+     * @return byte
+     */
+    public static byte charToByte(char c) {
+        return (byte) "0123456789ABCDEF".indexOf(c);
+    }
 }
