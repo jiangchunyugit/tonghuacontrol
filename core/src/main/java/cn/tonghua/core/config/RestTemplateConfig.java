@@ -15,29 +15,29 @@ import java.util.List;
 @Configuration
 public class RestTemplateConfig {
     @Bean
-    public RestTemplate restTemplate(ClientHttpRequestFactory factory){
+    public RestTemplate restTemplate(ClientHttpRequestFactory factory) {
 
         RestTemplate restTemplate = new RestTemplate(factory);
         List<HttpMessageConverter<?>> mcs = restTemplate.getMessageConverters();
 
         Iterator<HttpMessageConverter<?>> it = mcs.iterator();
-        while(it.hasNext()){
+        while (it.hasNext()) {
             HttpMessageConverter<?> hmc = it.next();
-            if(hmc instanceof MappingJackson2HttpMessageConverter){
+            if (hmc instanceof MappingJackson2HttpMessageConverter) {
                 it.remove();
             }
         }
 
-        mcs.add(mcs.size(),new GsonHttpMessageConverter());
+        mcs.add(mcs.size(), new GsonHttpMessageConverter());
         return restTemplate;
     }
 
     @Bean
-    public ClientHttpRequestFactory simpleClientHttpRequestFactory(){
+    public ClientHttpRequestFactory simpleClientHttpRequestFactory() {
         HttpComponentsClientHttpRequestFactory factory = new HttpComponentsClientHttpRequestFactory();
-        factory.setReadTimeout(10000);//单位为ms
-        factory.setConnectTimeout(10000);//单位为ms
-        factory.setConnectionRequestTimeout(10000);
+        factory.setReadTimeout(1000);//单位为ms
+        factory.setConnectTimeout(1000);//单位为ms
+        factory.setConnectionRequestTimeout(1000);
         return factory;
     }
 }
