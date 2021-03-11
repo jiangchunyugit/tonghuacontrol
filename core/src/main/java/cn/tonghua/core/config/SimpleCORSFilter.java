@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @Component
-public class SimpleCORSFilter  implements Filter {
+public class SimpleCORSFilter implements Filter {
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletResponse response = (HttpServletResponse) servletResponse;
@@ -17,8 +17,8 @@ public class SimpleCORSFilter  implements Filter {
         response.setHeader("Access-Control-Allow-Origin", "*");
         response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
         response.setHeader("Access-Control-Max-Age", "3600");
-        response.setHeader("Access-Control-Allow-Headers", "Content-Type,XFILENAME,XFILECATEGORY,XFILESIZE,x-requested-with,Authorization,souChl");
-        response.setHeader("Access-Control-Allow-Credentials","true");
+        response.setHeader("Access-Control-Allow-Headers", "Content-Type,XFILENAME,XFILECATEGORY,XFILESIZE,x-requested-with,Authorization,AuthOrg");
+        response.setHeader("Access-Control-Allow-Credentials", "true");
 
         if (request.getMethod().equals("OPTIONS")) {
             //跨域资源共享标准新增了一组 HTTP 首部字段，允许服务器声明哪些源站有权限访问哪些资源。
@@ -28,14 +28,18 @@ public class SimpleCORSFilter  implements Filter {
             // 在预检请求的返回中，服务器端也可以通知客户端，是否需要携带身份凭证（包括 Cookies 和 HTTP 认证相关数据）。
             // 参考：https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Access_control_CORS
             response.setStatus(HttpServletResponse.SC_OK);
-        }else {
+        } else {
             filterChain.doFilter(servletRequest, servletResponse);
         }
     }
+
     @Override
 
-    public void destroy() {}
+    public void destroy() {
+    }
+
     @Override
-    public void init(FilterConfig filterConfig) throws ServletException {}
+    public void init(FilterConfig filterConfig) throws ServletException {
+    }
 
 }

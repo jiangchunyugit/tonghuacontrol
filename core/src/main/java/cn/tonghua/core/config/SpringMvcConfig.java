@@ -31,9 +31,10 @@ import java.util.List;
 public class SpringMvcConfig extends WebMvcConfigurationSupport {
 
     @Value("${custom.config.openSwagger}")
-    Boolean  swaggerEnable;
+    Boolean swaggerEnable;
 
     MyLogger logger = LogUtil.getLogger(SpringMvcConfig.class);
+
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
 //        registry.addResourceHandler("/resources/**")
@@ -42,7 +43,7 @@ public class SpringMvcConfig extends WebMvcConfigurationSupport {
                 .addResourceLocations("classpath:/static/");
 //        registry.addResourceHandler("/static/**")
 //                .addResourceLocations("classpath:/webapp/**");
-        if(swaggerEnable){
+        if (swaggerEnable) {
             registry.addResourceHandler("swagger-ui.html")
                     .addResourceLocations("classpath:/META-INF/resources/");
             registry.addResourceHandler("/webjars/**")
@@ -54,6 +55,7 @@ public class SpringMvcConfig extends WebMvcConfigurationSupport {
 
     /**
      * 配置请求处理
+     *
      * @return
      */
     @Bean
@@ -63,35 +65,37 @@ public class SpringMvcConfig extends WebMvcConfigurationSupport {
         RequestMappingHandlerAdapter requestMappingHandlerAdapter = super.requestMappingHandlerAdapter();
         // 增加新的解析器
         List<HttpMessageConverter<?>> converters = Lists.newArrayList(new MySpringConvert());
-        List<HandlerMethodArgumentResolver> argumentResolvers =Lists.newArrayList(new MySpringProcessor(converters));
+        List<HandlerMethodArgumentResolver> argumentResolvers = Lists.newArrayList(new MySpringProcessor(converters));
         argumentResolvers.add(new MultiRequestBodyArgumentResolver());
         requestMappingHandlerAdapter.setCustomArgumentResolvers(argumentResolvers);
         List<HandlerMethodReturnValueHandler> returnValueHandlers = Lists.newArrayList(new MySpringProcessor(converters));
         requestMappingHandlerAdapter.setCustomReturnValueHandlers(returnValueHandlers);
-        
+
         return requestMappingHandlerAdapter;
     }
-    
-    
+
+
 //    @Override
 //    protected void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
 //    	 //添加json解析器 吕 2018-10-18
 //        argumentResolvers.add(new MultiRequestBodyArgumentResolver());
 //    }
-   
-    
+
+
     @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
         super.configureMessageConverters(converters);
         converters.add(responseBodyConverter());
         converters.add(byteConvert());
     }
+
     @Bean
     public HttpMessageConverter<String> responseBodyConverter() {
         return new StringHttpMessageConverter(Charset.forName("UTF-8"));
     }
+
     @Bean
-    public HttpMessageConverter<byte[]> byteConvert(){
+    public HttpMessageConverter<byte[]> byteConvert() {
         return new ByteArrayHttpMessageConverter();
     }
 
