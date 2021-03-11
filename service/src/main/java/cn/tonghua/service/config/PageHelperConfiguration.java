@@ -13,6 +13,7 @@ import java.util.Properties;
 @Configuration
 public class PageHelperConfiguration {
     private static final MyLogger log = LogUtil.getLogger(PageHelperConfiguration.class);
+
     @Bean
     public PageHelper pageHelper() {
         log.info("Config GitHub PageHelper");
@@ -23,7 +24,7 @@ public class PageHelperConfiguration {
         p.setProperty("reasonable", "true");
         //通过设置pageSize=0或者RowBounds.limit = 0就会查询出全部的结果。
         p.setProperty("pageSizeZero", "false");
-        p.setProperty("dialect","PostgreSQL");
+        p.setProperty("dialect", "PostgreSQL");
         pageHelper.setProperties(p);
         return pageHelper;
     }
