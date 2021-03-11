@@ -7,7 +7,7 @@ import org.springframework.data.redis.serializer.SerializationException;
 
 import java.nio.charset.Charset;
 
-public class GsonSerializer<T> implements RedisSerializer<T>  {
+public class GsonSerializer<T> implements RedisSerializer<T> {
 
     private Gson gson;
 
@@ -20,25 +20,25 @@ public class GsonSerializer<T> implements RedisSerializer<T>  {
         gson = new GsonBuilder().serializeNulls().enableComplexMapKeySerialization().create();
     }
 
-    public GsonSerializer(){
+    public GsonSerializer() {
         gson = new GsonBuilder().serializeNulls().enableComplexMapKeySerialization().create();
     }
 
 
     @Override
     public byte[] serialize(T o) throws SerializationException {
-        if(o == null){
+        if (o == null) {
             return null;
         }
 
-        return gson.toJson(o).getBytes( Charset.forName("UTF-8"));
+        return gson.toJson(o).getBytes(Charset.forName("UTF-8"));
     }
 
     @Override
     public T deserialize(byte[] bytes) throws SerializationException {
-        if(bytes == null || bytes.length == 0 ){
+        if (bytes == null || bytes.length == 0) {
             return null;
         }
-        return gson.fromJson(new String(bytes, Charset.forName("UTF-8")),clazz);
+        return gson.fromJson(new String(bytes, Charset.forName("UTF-8")), clazz);
     }
 }
